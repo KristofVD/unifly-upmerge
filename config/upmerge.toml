@@ -1,0 +1,45 @@
+github_org = "unifly-aero"
+
+branch_chain = ["v4.0", "v4.5", "v4.6", "v4.7", "v4.8", "v5.0"]
+
+[[repos]]
+name = "unifly-services"
+jenkins_job = "unifly-services"
+sonar_project = "unifly-all-services"
+
+[[repos]]
+name = "unifly-portal"
+jenkins_job = "unifly-portal"
+sonar_project = "unifly-portal"
+
+[[repos]]
+name = "unifly-tiles"
+jenkins_job = "unifly-tiles"
+sonar_project = "unifly-tiles"
+
+[[repos]]
+name = "unifly-geoserver"
+jenkins_job = "unifly-geoserver"
+sonar_project = "unifly-geoserver"
+
+[[repos]]
+name = "proj-demo"
+jenkins_job = "proj-demo"
+sonar_project = "proj-demo"
+
+[[repos]]
+name = "unifly-keycloak"
+jenkins_job = "unifly-keycloak"
+
+[[repos]]
+name = "unifly-socketcluster"
+jenkins_job = "unifly-socketcluster"
+
+[[repos]]
+name = "unifly-automation"
+
+[[repos]]
+name = "unifly.data"
+
+[[repos]]
+name = "app-automation"

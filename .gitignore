@@ -1,0 +1,8 @@
+.cache/
+reports/
+legacy/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+__pycache__/
+setup/skills/*/.netrc
+setup/skills/*/token

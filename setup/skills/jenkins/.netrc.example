@@ -1,0 +1,1 @@
+machine ci.unifly.tech login <your Jenkins user> password <your Jenkins API token>
