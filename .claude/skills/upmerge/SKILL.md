@@ -10,7 +10,7 @@ branch chain are configuration in `config/upmerge.toml`: edit them there, never 
 or in these instructions.
 
 Agents (in `.claude/agents/`): `upmerge-merger`, `upmerge-resolver`, `upmerge-verifier`, `upmerge-ci-watcher`.
-Skills used: `sonar-lint`, `jenkins`, `confluence` (Jira, hard tier only).
+Skills used: `sonar-lint`, `jenkins`, `confluence` (Jira: hard tier, Merge Monday ticket), `jira-like-me` (sub-ticket text).
 
 Set once at the start (after step 0):
 - `ROOT` = `pwd` (the repo root). Pass it to every agent as `root`.
@@ -78,6 +78,16 @@ conflicted ones flagged, so the developer picks which merges to do now. More tha
 doable merges → first question "all / only clean / only conflicted / let me pick",
 then narrow. Nothing selected → stop.
 
+## 2b. Merge Monday ticket
+
+```bash
+python3 tools/jira_ticket.py merge --day <DAY> --targets <target of every pending pair, deferred ones too>
+```
+Finds today's `Merge Monday DD/MM/YYYY: <first> up until <last>` Task in Jira (project, labels and the
+releases page come from `[jira]` in the configuration) or creates it, assigned to the developer, with the
+existing `vX.Y.0` fix versions of the targets. It returns `key`, `url` and `created`. Say the key in one
+line. Sub-tickets of step 6 go under it.
+
 ## 3. Merge, resolve, compile, unit test (parallel)
 
 Only conflict solving gets a stronger model or more effort. The mechanical work
@@ -130,10 +140,11 @@ inherited issues will reappear on the PR and are not the merge's fault.
 ## 5. Report
 
 Write `reports/<DAY>/upmerge-report.md` (+ `.json` with the raw dossiers/verdicts):
-summary table (repo | merge | status | tier (model/effort) | complexity | verdict | sonar baseline),
+the Merge Monday ticket key + link at the top,
+summary table (repo | merge | status | tier (model/effort) | complexity | verdict | sonar baseline | Jira sub-ticket),
 then per merge: conflict files with resolution + confident flag, Jira keys the resolver used (key + its
 `settled` line, never ticket text), validation gates,
-extra fix commits, verifier verdict and findings, deferred section.
+extra fix commits, verifier verdict and findings, the Jira sub-ticket with the conflict it hands over, deferred section.
 Show the developer the summary table.
 
 The report is published in step 8 and this repo is public, so write it publishable from the start:
@@ -148,7 +159,22 @@ The report is published in step 8 and this repo is public, so write it publishab
 Per merge:
 - `READY-TO-PUSH` **and** verifier `CONFIRM` → push and open the PR without asking.
 - anything else (`NEEDS-REVIEW`, `BLOCKED`, `REJECT`, failed gate) → show the
-  findings and ask with AskUserQuestion: push anyway / I'll fix it in `<workdir>` first / skip.
+  findings and ask with AskUserQuestion: push anyway / I'll fix it in `<workdir>` first /
+  Jira sub-ticket (hand it over) / skip.
+
+Jira sub-ticket: for a merge that is too tricky to finish today.
+1. Load the `jira-like-me` skill (when the developer has it) and write a very short description of the conflict we can't solve:
+   which file, which commits/tickets clash and the open decision, plus what is already known (e.g. the
+   compile fix). No scaffold, hyphen bullets without a space. Save it to `reports/<DAY>/jira-<repo>.txt`.
+2. Ask who takes it over (free text, or leave unassigned).
+3. Run:
+   ```bash
+   python3 tools/jira_ticket.py sub --parent <merge ticket key> --day <DAY> --repo <repo> \
+     --source <source> --target <target> --description-file reports/<DAY>/jira-<repo>.txt [--assignee "<name>"]
+   ```
+   It creates `<Repo>: Merge Monday DD/MM/YYYY: <src> up until <tgt>` as a Sub-task with the target's fix
+   version. When that sub-ticket already exists (made by hand) it only fills in the description.
+4. Don't push that merge. Put the sub-ticket key in the report.
 
 Push + PR:
 ```bash

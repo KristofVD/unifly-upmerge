@@ -19,6 +19,9 @@ This is configuration, not code. The repos and the branch chain to merge live in
 | `[[repos]]` `name` | Repo name in the organization |
 | `[[repos]]` `jenkins_job` | Jenkins multibranch job that builds the PR; leave it out when the repo has no Jenkins build (then only `gh pr checks` is used) |
 | `[[repos]]` `sonar_project` | SonarQube Cloud project key; leave it out when the repo has no Sonar analysis |
+| `[jira]` `base_url`, `project` | Jira site and project of the Merge Monday ticket and its sub-tickets (`tools/jira_ticket.py`) |
+| `[jira]` `labels` | Labels on the Merge Monday ticket |
+| `[jira]` `releases_page` | Confluence page linked in the Merge Monday ticket description |
 
 - **New version branch:** add it to the end of `branch_chain`. Repos that don't have the branch yet are reported as missing and skipped for that pair.
 - **New repo:** add a `[[repos]]` block with its `name`, and `jenkins_job` / `sonar_project` when it has them.

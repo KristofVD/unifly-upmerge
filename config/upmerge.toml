@@ -43,3 +43,9 @@ name = "unifly.data"
 
 [[repos]]
 name = "app-automation"
+
+[jira]
+base_url = "https://unifly.atlassian.net"
+project = "UP"
+labels = ["TestNot4TestTeam"]
+releases_page = "https://unifly.atlassian.net/wiki/spaces/PDOC/pages/2798125067/Web+Backend+Product+Releases"
