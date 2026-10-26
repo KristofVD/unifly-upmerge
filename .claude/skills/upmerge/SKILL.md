@@ -10,7 +10,7 @@ branch chain are configuration in `config/upmerge.toml`: edit them there, never 
 or in these instructions.
 
 Agents (in `.claude/agents/`): `upmerge-merger`, `upmerge-resolver`, `upmerge-verifier`, `upmerge-ci-watcher`.
-Skills used: `sonar-lint`, `jenkins`, `confluence` (Jira: hard tier, Merge Monday ticket), `jira-like-me` (sub-ticket text).
+Skills used: `sonar-lint`, `jenkins`, `confluence` (Jira: hard tier, Merge Monday ticket).
 
 Set once at the start (after step 0):
 - `ROOT` = `pwd` (the repo root). Pass it to every agent as `root`.
@@ -163,7 +163,7 @@ Per merge:
   Jira sub-ticket (hand it over) / skip.
 
 Jira sub-ticket: for a merge that is too tricky to finish today.
-1. Load the `jira-like-me` skill (when the developer has it) and write a very short description of the conflict we can't solve:
+1. Write a very short description of the conflict we can't solve:
    which file, which commits/tickets clash and the open decision, plus what is already known (e.g. the
    compile fix). No scaffold, hyphen bullets without a space. Save it to `reports/<DAY>/jira-<repo>.txt`.
 2. Ask who takes it over (free text, or leave unassigned).
