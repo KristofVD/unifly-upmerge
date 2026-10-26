@@ -2,15 +2,17 @@
 
 Chain: v4.0 → v4.5 → v4.6 → v4.7 → v4.8 → v5.0
 
+Merge Monday ticket: [UP-12717](https://unifly.atlassian.net/browse/UP-12717)
+
 ## Summary
 
-| repo | merge | status | tier (model/effort) | complexity | verdict | sonar baseline (source / target) |
-|---|---|---|---|---|---|---|
-| unifly-services | v4.8→v5.0 | PR #10269, CI green, Sonar OK | moderate (opus/high) | 3 | CONFIRM | v4.8 OK, 0 issues / v5.0 ERROR, 369 issues |
-| unifly-portal | v4.8→v5.0 | SKIPPED by the developer (not pushed) | moderate (opus/high) | 3 | NEEDS-REVIEW | v4.8 OK, 1 issue / v5.0 ERROR, 12 issues |
-| unifly-services | v4.6→v4.7 | nothing to merge (done upstream in #10267 during the run) | clean | 0 | - | v4.6 OK, 0 / v4.7 OK, 0 |
-| unifly-portal | v4.7→v4.8 | nothing to merge (done upstream in #11884 during the run) | clean | 0 | - | v4.7 OK, 0 / v4.8 OK, 1 |
-| unifly-automation | v4.8→v5.0 | nothing to merge (done upstream in #1657 during the run) | clean | 0 | - | no Sonar project |
+| repo | merge | status | tier (model/effort) | complexity | verdict | sonar baseline (source / target) | Jira sub-ticket |
+|---|---|---|---|---|---|---|---|
+| unifly-services | v4.8→v5.0 | PR #10269, CI green, Sonar OK | moderate (opus/high) | 3 | CONFIRM | v4.8 OK, 0 issues / v5.0 ERROR, 369 issues | - |
+| unifly-portal | v4.8→v5.0 | handed over (not pushed) | moderate (opus/high) | 3 | NEEDS-REVIEW | v4.8 OK, 1 issue / v5.0 ERROR, 12 issues | [UP-12718](https://unifly.atlassian.net/browse/UP-12718) |
+| unifly-services | v4.6→v4.7 | nothing to merge (done upstream in #10267 during the run) | clean | 0 | - | v4.6 OK, 0 / v4.7 OK, 0 | - |
+| unifly-portal | v4.7→v4.8 | nothing to merge (done upstream in #11884 during the run) | clean | 0 | - | v4.7 OK, 0 / v4.8 OK, 1 | - |
+| unifly-automation | v4.8→v5.0 | nothing to merge (done upstream in #1657 during the run) | clean | 0 | - | no Sonar project | - |
 
 Nothing pending in unifly-tiles, unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
 Missing branches: unifly-services has no v4.0; app-automation has no v4.6, v4.7, v4.8, v5.0.
@@ -100,7 +102,7 @@ CI: Jenkins PR-10269 build #1 **SUCCESS** on the first run (13.4 min): 11565 tes
 CollisionFlowTest (4/4), Ed318FileConfigurationIntegrationTest (6/6). Sonar PR gate **OK**, 0 new issues,
 0 hotspots. No fix commits needed.
 
-## unifly-portal v4.8→v5.0 (skipped)
+## unifly-portal v4.8→v5.0 (handed over in UP-12718)
 
 Merge commit `71dc2208db`, head `81bf758271`. Not pushed; the branch stays local.
 
@@ -126,7 +128,22 @@ Verifier (opus/high): **NEEDS-REVIEW**. Nothing dropped, but a behaviour clash:
 - Adding `getIsSupportingVolumesLoading()` back to the guard would bring back the first-click problem for
   those edits. This needs a decision from the CAN-7322 / UP-10948 owners.
 
-The developer chose to skip this merge for today.
+The developer chose not to push this merge today and handed it over in the sub-ticket
+[UP-12718](https://unifly.atlassian.net/browse/UP-12718) (under the Merge Monday ticket UP-12717). The ticket
+description says what can't be solved by the merge alone:
+
+```
+flightview.ts: keep v5.0, 08bae0d474 makes code null-safe that UP-12136 removed on v5.0.
+Actions.tsx auto-merges but doesn't compile: CAN-7322 imports ./providers/GeometryPropertiesProvider, that moved to web-common on v5.0 (UP-12241, UP-11540).
+-Fix: useGeometryProperties(OPERATION_DRAWING_LAYER_ID).isLoading from @unifly-aero/web-common/src/map/drawing/useGeometryProperties, same as helpers.ts.
+
+Open decision:
+CAN-7322 drops useIsAnyRequestLoading() from isSaveDisabled. On v5.0 that also waited for the supporting volumes (UP-10948), which don't exist on v4.8.
+I think Save can then send stale or null supporting volumes right after a startTime or shape edit (UasOperationCreationForm.tsx sends getSupportingVolumes() at click time).
+Adding getIsSupportingVolumesLoading() back to isSaveDisabled could bring the double click of CAN-7322 back.
+
+Check with the CAN-7322 / UP-10948 devs which one wins, then finish the merge.
+```
 
 ## Deferred
 
