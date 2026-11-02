@@ -14,6 +14,10 @@ Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (M
 | unifly-portal | v4.7→v4.8 | merged by the developer (#11950) | clean | – | – | – | – |
 | unifly-services | v4.8→v5.0 | PR [#10303](https://github.com/unifly-aero/unifly-services/pull/10303), Jenkins green, Sonar OK | moderate (opus/high) | 4 | CONFIRM | – | – |
 | unifly-services | v4.7→v4.8 (Sonar backport) | PR [#10302](https://github.com/unifly-aero/unifly-services/pull/10302), Jenkins green, Sonar OK | clean, tree identical to v4.8 | 0 | – | – | – |
+| unifly-services | v4.8→v5.0 (Sonar backport) | PR [#10304](https://github.com/unifly-aero/unifly-services/pull/10304), Jenkins green, Sonar OK | clean, tree identical to v5.0 | 0 | – | – | – |
+| unifly-services | v5.0→v5.1 | PR [#10305](https://github.com/unifly-aero/unifly-services/pull/10305), Jenkins green (2nd build), Sonar OK | mechanical (sonnet/medium) | 1 | CONFIRM | – | – |
+
+Configuration change during the run: v5.1 added to the chain and unifly-developer-portal added (v5.0 and v5.1 only); nothing pending there.
 
 Up to date: unifly-tiles, unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
 Missing chain branches: unifly-services (v4.0), app-automation (v4.6, v4.7, v4.8, v5.0).
@@ -190,6 +194,24 @@ Compile adaptations of auto-merged v4.8 code inside the merge commit:
 ## unifly-services v4.7→v4.8 (Sonar backport)
 
 Merging #10300 into v4.7 left a v4.7→v4.8 pair whose merged tree is identical to v4.8 (v4.8 already had #10052). PR #10302 only records the merge. Jenkins PR-10302 build #1 **SUCCESS**, Sonar gate OK.
+
+## unifly-services v4.8→v5.0 (Sonar backport)
+
+Merging #10302 into v4.8 left a v4.8→v5.0 pair whose merged tree is identical to v5.0. PR #10304 only records the merge. Jenkins PR-10304 build #1 **SUCCESS**, Sonar gate OK.
+
+## unifly-services v5.0→v5.1
+
+v5.1 was added to the chain today. Started after #10303 was merged (28 commits, including today's v4.x upmerges, the Redis security-feature cache #10273 and the Loki JSON logging).
+Tier mechanical (score 1), resolver sonnet/medium, verifier sonnet/medium.
+
+| file | resolution | confident |
+|---|---|---|
+| `ServicesIntegrationApiConfiguration.java` | Import-only: kept v5.0's `CompanyInfo` and `Company` (used by the UP-12687 converter bean); left out `UserCertificateInfo` and `UserCertificate`, which v5.1 itself had stopped using when `userCertificateFinder` moved to `CertificateInternalService` | yes |
+
+- Gates: markers pass, carried pass, spotless pass, compile pass, unit tests pass, integration tests skipped locally.
+- Extra commits: none.
+- Verifier: **CONFIRM**. No new or dropped lines on either side.
+- CI: Jenkins PR-10305 build #1 failed on two timing tests unrelated to the merge (`SpELMailMessageTransformerTest.testNoFatalBacktracking`: 50 ms timeout; `Ed318FileConfigurationIntegrationTest.ed318FileReadingFlow_validFile_convertsToSixGeoZones`: 10 s await), both green on v5.0 and v5.1. Build #2 **SUCCESS** (11917 tests passed, both tests included). Sonar gate on the PR **OK**, 0 new issues. No fix commits.
 
 ## Jira sub-tickets
 
