@@ -12,7 +12,8 @@ Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (M
 | unifly-services | v4.7→v4.8 | PR [#10301](https://github.com/unifly-aero/unifly-services/pull/10301), Jenkins green, Sonar OK | clean (–; verifier sonnet/medium) | 0 | CONFIRM | v4.7 OK (0) / – | – |
 | unifly-portal | v4.6→v4.7 | merged by the developer (#11949) | clean | – | – | – | – |
 | unifly-portal | v4.7→v4.8 | merged by the developer (#11950) | clean | – | – | – | – |
-| unifly-services | v4.8→v5.0 | deferred behind #10301 | predicted moderate | – | – | – | – |
+| unifly-services | v4.8→v5.0 | PR [#10303](https://github.com/unifly-aero/unifly-services/pull/10303), Jenkins green, Sonar OK | moderate (opus/high) | 4 | CONFIRM | – | – |
+| unifly-services | v4.7→v4.8 (Sonar backport) | PR [#10302](https://github.com/unifly-aero/unifly-services/pull/10302), Jenkins green, Sonar OK | clean, tree identical to v4.8 | 0 | – | – | – |
 
 Up to date: unifly-tiles, unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
 Missing chain branches: unifly-services (v4.0), app-automation (v4.6, v4.7, v4.8, v5.0).
@@ -162,10 +163,38 @@ The v4.7 branch builds #49 and #50 failed after all tests passed, in the Sonar s
 v4.8 fixed this in #10052 "Stabilize sonar build" (765cc9241b) by pinning `sonar.tests` to `src/test/java` in both modules; v4.6 and v4.7 never got it.
 Backported to v4.7 as PR [#10300](https://github.com/unifly-aero/unifly-services/pull/10300) (cherry-pick; one conflict because v4.7 lacked the earlier uspace commit cbab095fe5, resolved to v4.8's block so both files match v4.8). Jenkins PR-10300 build #1 **SUCCESS**, Sonar PR analysis successful, gate OK. The branch Sonar stage is only proven fixed by the next v4.7 build after the merge.
 
+## unifly-services v4.8→v5.0
+
+Started after #10301 was merged upstream (19 commits). The developer stopped the first validation run by mistake; it was restarted from the committed merge.
+Tier moderate (score 4), resolver opus/high, verifier opus/high.
+
+| file | resolution | confident |
+|---|---|---|
+| `GeoZoneValidityServiceImpl.java` | v5.0 `GeoZoneValidityStatus` imports plus v4.8's `ZONE_UTC` import from v5.0's `aero.unifly.common.util.DateUtil` | yes |
+| `UasEntityServiceImpl.java` | v4.8 method (in-air and in-active-operation checks) with v5.0's `getUniqueIdentifier().getValue()` | yes |
+| `UasOperationPermissionProcessToUasOperationPermissionDetailInfoConverter.java` | v4.8 builder form with v5.0's `getUniqueIdentifier().getValue()` | yes |
+| `UasEntityServiceImplTest.java` | v4.8 tests with v5.0 typed-id stubs | yes |
+| `UasOperationPermissionProcessToUasOperationPermissionDetailInfoConverterTest.java` | Import union; v5.0 `UasOperationUuid.of` plus v4.8 assignee and conversation mocks | yes |
+| `SoonActiveGeoZoneOverlapFinderIntegrationTest.java` | v4.8 `java.time` imports, v5.0 Spring `Transactional` | yes |
+
+Compile adaptations of auto-merged v4.8 code inside the merge commit:
+- BEDG-1174: `GeoZoneValidityRepository.findCurrentValiditiesByGeoZone` takes a `GeoZoneUuid`, like the neighbouring queries.
+- UP-12697: `UasOperationRepository.isUasInActiveOperation` takes a `UasUuid`; `UasFlightInternalServiceImpl` wraps it like `isUasInAir`.
+- BEDG-1160: `ED269UasZoneBuilderTest` uses the renamed `AipMappingConfigurationProperties`.
+
+- Gates: markers pass, carried pass, spotless pass, compile pass, unit tests pass, integration tests skipped locally.
+- Extra commits: `Fixed tests after upmerge` (the new `UasInActiveOperationException` imported a `CodeException` package that does not exist on v5.0).
+- Verifier: **CONFIRM**. The diff against v5.0 covers exactly v4.8's 28 files (+492/-70); every differing line is an adaptation to v5.0 types or packages, nothing of v5.0 is reverted.
+- CI: Jenkins PR-10303 build #1 **SUCCESS** (11896 tests passed, including `UasOperationRepositoryTest.isUasInActiveOperation*` and `SoonActiveGeoZoneOverlapFinderIntegrationTest`). Sonar gate on the PR **OK**, 0 new issues. No CI fix commits.
+
+## unifly-services v4.7→v4.8 (Sonar backport)
+
+Merging #10300 into v4.7 left a v4.7→v4.8 pair whose merged tree is identical to v4.8 (v4.8 already had #10052). PR #10302 only records the merge. Jenkins PR-10302 build #1 **SUCCESS**, Sonar gate OK.
+
 ## Jira sub-tickets
 
 None.
 
 ## Deferred
 
-- unifly-services v4.8→v5.0 (5 conflict files, predicted moderate): waits on #10301 (v4.7→v4.8). #10298 (v4.6→v4.7) is already merged.
+None.
