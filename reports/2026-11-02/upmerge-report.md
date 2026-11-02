@@ -16,10 +16,13 @@ Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (M
 | unifly-services | v4.7→v4.8 (Sonar backport) | PR [#10302](https://github.com/unifly-aero/unifly-services/pull/10302), Jenkins green, Sonar OK | clean, tree identical to v4.8 | 0 | – | – | – |
 | unifly-services | v4.8→v5.0 (Sonar backport) | PR [#10304](https://github.com/unifly-aero/unifly-services/pull/10304), Jenkins green, Sonar OK | clean, tree identical to v5.0 | 0 | – | – | – |
 | unifly-services | v5.0→v5.1 | PR [#10305](https://github.com/unifly-aero/unifly-services/pull/10305), Jenkins green (2nd build), Sonar OK | mechanical (sonnet/medium) | 1 | CONFIRM | – | – |
+| unifly-portal | v5.0→v5.1 | merged by the developer | clean | – | – | – | – |
+| unifly-tiles | v4.8→v5.0 | merged by the developer | clean | – | – | – | – |
+| unifly-keycloak | v5.0→v5.1 | merged by the developer | clean | – | – | – | – |
 
 Configuration change during the run: v5.1 added to the chain and unifly-developer-portal added (v5.0 and v5.1 only); nothing pending there.
 
-Up to date: unifly-tiles, unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
+Up to date: unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
 Missing chain branches: unifly-services (v4.0), app-automation (v4.6, v4.7, v4.8, v5.0).
 
 ## Overview at scan time
@@ -212,6 +215,15 @@ Tier mechanical (score 1), resolver sonnet/medium, verifier sonnet/medium.
 - Extra commits: none.
 - Verifier: **CONFIRM**. No new or dropped lines on either side.
 - CI: Jenkins PR-10305 build #1 failed on two timing tests unrelated to the merge (`SpELMailMessageTransformerTest.testNoFatalBacktracking`: 50 ms timeout; `Ed318FileConfigurationIntegrationTest.ed318FileReadingFlow_validFile_convertsToSixGeoZones`: 10 s await), both green on v5.0 and v5.1. Build #2 **SUCCESS** (11917 tests passed, both tests included). Sonar gate on the PR **OK**, 0 new issues. No fix commits.
+
+## Late clean merges
+
+A rescan after v5.1 was added showed three new clean pairs; the developer merged them by hand:
+- unifly-portal v5.0→v5.1: 2 commits (UP-12686).
+- unifly-tiles v4.8→v5.0: 1 commit, "Use configured db pool size iso hardcoded one (#467)".
+- unifly-keycloak v5.0→v5.1: 2 commits (UP-11458).
+
+unifly-automation v5.0→v5.1 already had an open PR (https://github.com/unifly-aero/unifly-automation/pull/1669) and was left to it.
 
 ## Jira sub-tickets
 
