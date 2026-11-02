@@ -115,7 +115,10 @@ def result(key: str, summary: str, created: bool) -> None:
 def merge_ticket(args) -> None:
     cfg = jira_config()
     with open(CONFIG, 'rb') as f:
-        chain = tomllib.load(f)['branch_chain']
+        config = tomllib.load(f)
+    chain = config['branch_chain']
+    partial = [f"{r['name']}: " + ' → '.join(b for b in chain if b in r['branches'])
+               for r in config['repos'] if r.get('branches')]
     date = ticket_date(args.day)
     summary = f'Merge Monday {date}: {short(chain[0])} up until {short(chain[-1])}'
     found = search(f'project = {cfg["project"]} AND issuetype = Task AND summary ~ "\\"Merge Monday {date}\\""')
@@ -126,7 +129,7 @@ def merge_ticket(args) -> None:
         'project': {'key': cfg['project']},
         'issuetype': {'name': 'Task'},
         'summary': summary,
-        'description': adf([' → '.join(chain), f"see {cfg['releases_page']}"]),
+        'description': adf([' → '.join(chain), *partial, f"see {cfg['releases_page']}"]),
         'assignee': {'accountId': myself()},
         'labels': cfg.get('labels', []),
         'fixVersions': fix_versions(args.targets),
