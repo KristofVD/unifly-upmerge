@@ -14,8 +14,8 @@ Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (M
 | unifly-portal | v4.7→v4.8 | merged by the developer (#11950) | clean | – | – | – | – |
 | unifly-services | v4.8→v5.0 | PR [#10303](https://github.com/unifly-aero/unifly-services/pull/10303), Jenkins green, Sonar OK | moderate (opus/high) | 4 | CONFIRM | – | – |
 | unifly-services | v4.7→v4.8 (Sonar backport) | PR [#10302](https://github.com/unifly-aero/unifly-services/pull/10302), Jenkins green, Sonar OK | clean, tree identical to v4.8 | 0 | – | – | – |
-| unifly-services | v4.8→v5.0 (Sonar backport) | PR [#10304](https://github.com/unifly-aero/unifly-services/pull/10304), Jenkins green, Sonar OK | clean, tree identical to v5.0 | 0 | – | – | – |
-| unifly-services | v5.0→v5.1 | PR [#10305](https://github.com/unifly-aero/unifly-services/pull/10305), Jenkins green (2nd build), Sonar OK | mechanical (sonnet/medium) | 1 | CONFIRM | – | – |
+| unifly-services | v4.8→v5.0 (Sonar backport) | PR [#10304](https://github.com/unifly-aero/unifly-services/pull/10304), Jenkins green, Sonar OK, merged | clean, tree identical to v5.0 | 0 | – | – | – |
+| unifly-services | v5.0→v5.1 | PR [#10305](https://github.com/unifly-aero/unifly-services/pull/10305), Jenkins green (2nd build), Sonar OK, merged | mechanical (sonnet/medium) | 1 | CONFIRM | – | – |
 | unifly-portal | v5.0→v5.1 | merged by the developer | clean | – | – | – | – |
 | unifly-tiles | v4.8→v5.0 | merged by the developer | clean | – | – | – | – |
 | unifly-keycloak | v5.0→v5.1 | merged by the developer | clean | – | – | – | – |
@@ -231,4 +231,4 @@ None.
 
 ## Deferred
 
-None.
+- unifly-services v5.0→v5.1: after #10304 was merged, v5.0 is 6 commits ahead of v5.1 (the Sonar backport merges), with no file changes. Left for the next run.
