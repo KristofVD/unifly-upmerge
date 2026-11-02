@@ -1,6 +1,8 @@
 # Upmerge report 2026-11-02
 
-Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (Merge Monday 02/11/2026: 4.0 up until 5.0)
+Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (Merge Monday 02/11/2026: 4.0 up until 5.1)
+
+Chain: v4.0 → v4.5 → v4.6 → v4.7 → v4.8 → v5.0 → v5.1. unifly-developer-portal only has v5.0 → v5.1.
 
 ## Summary
 
@@ -20,10 +22,10 @@ Merge Monday ticket: [UP-12768](https://unifly.atlassian.net/browse/UP-12768) (M
 | unifly-tiles | v4.8→v5.0 | merged by the developer | clean | – | – | – | – |
 | unifly-keycloak | v5.0→v5.1 | merged by the developer | clean | – | – | – | – |
 
-Configuration change during the run: v5.1 added to the chain and unifly-developer-portal added (v5.0 and v5.1 only); nothing pending there.
+Configuration change during the run: v5.1 added to the chain for every repo and unifly-developer-portal added (v5.0 and v5.1 only); nothing pending there.
 
-Up to date: unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data.
-Missing chain branches: unifly-services (v4.0), app-automation (v4.6, v4.7, v4.8, v5.0).
+Up to date: unifly-geoserver, proj-demo, unifly-keycloak, unifly-socketcluster, unifly.data, unifly-developer-portal.
+Missing chain branches: unifly-services (v4.0), app-automation (v4.6, v4.7, v4.8, v5.0, v5.1).
 
 ## Overview at scan time
 
