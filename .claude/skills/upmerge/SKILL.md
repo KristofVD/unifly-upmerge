@@ -218,7 +218,13 @@ git push origin main
 ```
 `reports/` is in `.gitignore`, hence `-f`: only this one file goes in, never `scan.json` or
 `upmerge-report.json`. A rejected push → `git pull --rebase origin main`, then push again;
-never force-push. Give the developer the GitHub link to the report. The run ends here.
+never force-push. Then link the report on the Merge Monday ticket of step 2b (always, also when the
+report was updated later in the day; it updates the existing link, never adds a second one):
+```bash
+url="https://github.com/$(git remote get-url origin | sed -E 's#^(git@github.com:|https://github.com/)##; s#\.git$##')/blob/main/reports/<DAY>/upmerge-report.md"
+python3 tools/jira_ticket.py link --key <merge ticket key> --day <DAY> --url "$url"
+```
+Give the developer the full GitHub link to the report and the ticket link. The run ends here.
 
 ## Notes
 

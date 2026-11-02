@@ -160,6 +160,13 @@ def sub_ticket(args) -> None:
     result(call('POST', '/rest/api/3/issue', {'fields': fields})['key'], summary, True)
 
 
+def report_link(args) -> None:
+    title = f'Upmerge report {args.day}'
+    body = {'globalId': f'upmerge-report-{args.day}', 'object': {'url': args.url, 'title': title}}
+    call('POST', f'/rest/api/3/issue/{args.key}/remotelink', body)
+    print(json.dumps({'key': args.key, 'url': browse(args.key), 'link': args.url, 'title': title}, indent=1))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description='Create the Merge Monday Jira ticket and its sub-tickets.')
     sub = ap.add_subparsers(dest='command', required=True)
@@ -176,6 +183,11 @@ def main() -> int:
     s.add_argument('--description-file', required=True)
     s.add_argument('--assignee', help='name or e-mail of the colleague who takes the merge over')
     s.set_defaults(func=sub_ticket)
+    r = sub.add_parser('link', help='add (or update) the web link to the published report on the Merge Monday ticket')
+    r.add_argument('--key', required=True, help='the Merge Monday ticket key')
+    r.add_argument('--day', required=True, help='YYYY-MM-DD')
+    r.add_argument('--url', required=True, help='GitHub URL of the committed upmerge-report.md')
+    r.set_defaults(func=report_link)
     args = ap.parse_args()
     args.func(args)
     return 0
