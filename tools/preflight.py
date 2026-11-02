@@ -78,6 +78,10 @@ def check_config():
     if missing:
         add('configuration', 'fail', f'config/upmerge.toml lacks {", ".join(missing)}', 'fix config/upmerge.toml')
         return None
+    unknown = [f"{r['name']}: {b}" for r in config['repos'] for b in r.get('branches', []) if b not in config['branch_chain']]
+    if unknown:
+        add('configuration', 'fail', f'repo branches not in branch_chain: {", ".join(unknown)}', 'fix config/upmerge.toml')
+        return None
     add('configuration', 'ok', f"{len(config['repos'])} repos, chain {' → '.join(config['branch_chain'])}")
     return config
 

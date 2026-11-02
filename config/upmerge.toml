@@ -1,6 +1,6 @@
 github_org = "unifly-aero"
 
-branch_chain = ["v4.0", "v4.5", "v4.6", "v4.7", "v4.8", "v5.0"]
+branch_chain = ["v4.0", "v4.5", "v4.6", "v4.7", "v4.8", "v5.0", "v5.1"]
 
 [[repos]]
 name = "unifly-services"
@@ -43,6 +43,11 @@ name = "unifly.data"
 
 [[repos]]
 name = "app-automation"
+
+[[repos]]
+name = "unifly-developer-portal"
+jenkins_job = "unifly-developer-portal"
+branches = ["v5.0", "v5.1"]
 
 [jira]
 base_url = "https://unifly.atlassian.net"

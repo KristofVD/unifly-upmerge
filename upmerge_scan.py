@@ -51,6 +51,11 @@ CI_META = {
     for r in CONFIG['repos']
 }
 
+REPO_CHAIN = {
+    r['name']: [b for b in BRANCH_CHAIN if b in r['branches']] if r.get('branches') else BRANCH_CHAIN
+    for r in CONFIG['repos']
+}
+
 
 @dataclass
 class PendingMerge:
@@ -258,7 +263,7 @@ def main() -> None:
     for repo in selected:
         if not args.json:
             print(f"Scanning {repo_name(repo)} ...", file=sys.stderr, flush=True)
-        reports.append(scan_repo(repo, BRANCH_CHAIN))
+        reports.append(scan_repo(repo, REPO_CHAIN[repo_name(repo)]))
 
     if args.json:
         print(json.dumps({'chain': BRANCH_CHAIN, 'repos': [asdict(r) for r in reports]}, indent=2))
